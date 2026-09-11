@@ -1,0 +1,21 @@
+name: Bug report
+description: Report a reproducible Windows worker problem without private diagnostics.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Explain expected behavior and reproducible steps. Remove local addresses, identities and private paths.
+    validations:
+      required: true
+  - type: input
+    id: build
+    attributes:
+      label: Worker revision, Windows version and NVIDIA GPU
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Redacted evidence
+      description: Relevant error only. Never attach complete diagnostics, keys, prompts or model responses.

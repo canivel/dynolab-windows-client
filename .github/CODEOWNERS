@@ -1,0 +1,7 @@
+# Enforced by repository review rules; public PRs do not grant merge access.
+* @canivel
+/.github/ @canivel
+/src/dyno/pool/ @canivel
+/worker/windows/ @canivel
+/requirements-dev.txt @canivel
+/pyproject.toml @canivel

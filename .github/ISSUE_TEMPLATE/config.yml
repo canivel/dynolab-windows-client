@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability privately
+    url: https://github.com/canivel/dynolab-windows-client/security/advisories/new
+    about: Do not post secrets or vulnerability details in a public issue.
+  - name: Dyno Lab Mac coordinator
+    url: https://github.com/canivel/dynolab/issues
+    about: Report Mac app and coordinator issues in the main project.
