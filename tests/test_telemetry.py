@@ -4,6 +4,7 @@ import subprocess
 import threading
 import time
 import unittest
+from pathlib import Path
 from unittest.mock import Mock, patch
 
 from dyno.pool.telemetry import Telemetry, MAX_HEADERS, MAX_RESPONSE, MAX_CLIENTS
@@ -45,6 +46,17 @@ class TelemetryTests(unittest.TestCase):
         self.assertIsNone(gpu['power_watts'])
         self.assertIsNone(gpu['selected'])
         self.assertLess(len(self.service.payload()), MAX_RESPONSE)
+
+    def test_full_json_schema(self):
+        import jsonschema
+        schema = json.loads((Path(__file__).resolve().parents[1] / 'docs' / 'POOL-TELEMETRY-V1.schema.json').read_text())
+        validator = jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker())
+        validator.validate(self.service.snapshot())
+        self.service.collect()
+        validator.validate(self.service.snapshot())
+        self.service.collector = Mock(side_effect=OSError())
+        self.service.collect()
+        validator.validate(self.service.snapshot())
 
     def test_rpc_owned_process_and_uuid_not_ordinal(self):
         self.service.collect()

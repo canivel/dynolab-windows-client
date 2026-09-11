@@ -95,6 +95,16 @@ class WorkerTests(unittest.TestCase):
             self.worker.log(str(index))
         self.assertEqual(len(self.worker.snapshot()['logs']), 2000)
 
+    def test_uuid_remaps_child_to_cuda_zero_and_disables_rdma(self):
+        ident = 'GPU-11111111-2222-3333-4444-555555555555'
+        script = 'import os; print(os.environ.get("CUDA_VISIBLE_DEVICES"), os.environ.get("GGML_RPC_NO_RDMA"), flush=True)'
+        with patch.object(w, 'command', return_value=[sys.executable, '-u', '-c', script]) as command:
+            with self.assertRaisesRegex(ValueError, 'exited'):
+                self.worker.start(self.binary, device='CUDA7', port=0, gpu_uuid=ident)
+        self.assertEqual(command.call_args.args[1], 'CUDA0')
+        self.assertEqual(self.worker.device_id, ident)
+        self.assertTrue(any(ident + ' 1' in line for line in self.worker.snapshot()['logs']))
+
     @unittest.skipUnless(sys.platform == 'win32', 'Windows Job Object failure path')
     def test_assignment_failure_closes_pipe_and_owned_process(self):
         with patch.object(w, 'command', return_value=[sys.executable, '-u', '-c',
