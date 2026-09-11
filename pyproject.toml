@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dynolab-windows-client"
+version = "0.1.0.dev0"
+description = "Bring NVIDIA GPU memory to a local Dyno Lab inference pool."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+dependencies = ["zeroconf==0.151.3", "cryptography==50.0.1", "ifaddr==0.2.0"]
+
+[project.scripts]
+dyno-worker = "dyno.pool.worker_app:main"
+
+[project.urls]
+Homepage = "https://github.com/canivel/dynolab-windows-client"
+"Dyno Lab" = "https://github.com/canivel/dynolab"
+Issues = "https://github.com/canivel/dynolab-windows-client/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dyno"]
